@@ -18,19 +18,29 @@
   <form class="form" method="post" action="exec/newuser" enctype="multipart/form-data">
    <table>
     <tr <c:if test="${errors['login'] != null}">class="error-position"</c:if>>
-     <td><label for="login"><fmt:message key="login.user.name"/></label></td><td><input id="login" name="login" type="text" size="20" value="<c:out value="${param['login']}"/>"/></td></tr>
+     <td><label for="login"><fmt:message key="login.user.name"/></label></td><td><input id="login" name="login" type="text" size="20" value="<c:out value="${param['login']}"/>"/></td><td></td></tr>
     <tr <c:if test="${errors['email'] != null}">class="error-position"</c:if>>
-     <td><label for="email"><fmt:message key="login.user.email"/></label></td><td><input id="email" name="email" type="text" size="20" value="<c:out value="${param['email']}"/>"/></td></tr>
+     <td><label for="email"><fmt:message key="login.user.email"/></label></td><td><input id="email" name="email" type="text" size="20" value="<c:out value="${param['email']}"/>"/></td><td></td></tr>
     <tr <c:if test="${errors['password'] != null}">class="error-position"</c:if>>
-     <td><label for="password"><fmt:message key="login.password"/></label></td><td><input id="password" name="password" type="password" size="20" value=""/></td></tr>
+     <td><label for="password"><fmt:message key="login.password"/></label></td><td><input id="password" name="password" type="password" size="20" value=""/></td><td></rd></tr>
     <tr <c:if test="${errors['password'] != null}">class="error-position"</c:if>>
-     <td><label for="password2"><fmt:message key="login.password.again"/></label></td><td><input id="password2" name="password2" type="password" size="20" value=""/></td></tr>
-    <tr><td class="form-buttons" colspan="2">
+     <td><label for="password2"><fmt:message key="login.password.again"/></label></td><td><input id="password2" name="password2" type="password" size="20" value=""/></td><td></td></tr>
+     <tr <c:if test="${errors['letters'] != null}">class="error-position"</c:if>>
+    <td>
+    <fmt:message key="login.letters"/>
+    </td>
+    <td>
+   <input type='text' name='j_captcha_response' value=''></td>
+   <td><img src="jcaptcha"></td>
+    </td>
+    </tr> 
+   <tr><td class="form-buttons" colspan="3">
      <input value="<fmt:message key="login.register"/>" name="register" type="submit"/>
      <input value="<fmt:message key="dialog.cancel"/>" name="cancel" type="submit"/>
     </td></tr>
-   </table>
+ </table>
    <input name="referer" type="hidden" value="<%= Encoder.escape(request.getHeader("REFERER")) %>"/>
+
   </form>
  </div>
 </div>

@@ -6,6 +6,9 @@
  *
  * Please visit http://snipsnap.org/ for updates and contact.
  *
+ * Copyright (c) 2006-2007 Paulo Abrantes
+ * All Rights Reserved. 
+ *
  * --LICENSE NOTICE--
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,11 +126,11 @@ public class SnipLink {
   }
 
   public static Writer appendLink(Writer writer, Snip snip) throws IOException {
-    return appendLink(writer, snip.getName());
+    return appendLink(writer, snip.getName(), snip.getTitle());
   }
 
   public static StringBuffer appendLink(StringBuffer buffer, Snip snip) {
-    return appendLink(buffer, snip.getName());
+    return appendLink(buffer, snip.getName(), snip.getTitle());
   }
 
   public static Writer appendLink(Writer writer, String name) throws IOException {

@@ -53,7 +53,9 @@
   </s:check>
   <s:check roles="Authenticated" invert="true" >
     <fmt:message key="login.please">
-      <fmt:param><fmt:message key="post.comment"/></fmt:param>
+        <fmt:param><c:out value="${app.configuration.realHost}"/></fmt:param>
+	<fmt:param><c:out value="${app.configuration.path}"/></fmt:param>
+	<fmt:param><fmt:message key="post.comment"/></fmt:param>
     </fmt:message>
   </s:check>
  </div>

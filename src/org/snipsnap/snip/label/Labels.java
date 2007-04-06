@@ -5,6 +5,8 @@
  * All Rights Reserved.
  *
  * Please visit http://snipsnap.org/ for updates and contact.
+ * Copyright (c) 2006-2007 Paulo Abrantes 
+ * All Rights Reserved.   
  *
  * --LICENSE NOTICE--
  * This program is free software; you can redistribute it and/or
@@ -162,8 +164,10 @@ public class Labels {
           value += ":" + data[i];
         }
         Label label = createLabel(data[0], data[1], value);
-        label.setSnip(snip);
-        addLabel(label);
+        if(label!=null) {
+        	label.setSnip(snip);
+        	 addLabel(label);
+        }
       } else {
         System.err.println("Labels: Broken Label: '" + labelToken + "' ignored");
       }

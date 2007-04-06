@@ -5,7 +5,8 @@
  * All Rights Reserved.
  *
  * Please visit http://snipsnap.org/ for updates and contact.
- *
+ * Copyright (c) 2006-2007 Paulo Abrantes 
+ * All Rights Reserved.   
  * --LICENSE NOTICE--
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +34,7 @@ import org.radeox.util.i18n.ResourceManager;
 import org.radeox.util.logging.Logger;
 import org.snipsnap.app.Application;
 import org.snipsnap.container.Components;
+import org.snipsnap.snip.Snip;
 import org.snipsnap.snip.SnipLink;
 import org.snipsnap.snip.SnipSpace;
 import org.snipsnap.snip.SnipSpaceFactory;
@@ -100,10 +102,18 @@ public class SearchMacro extends BaseMacro {
         writer.write("<blockquote>");
         try {
           for (int i = start; i < end; i++) {
-            SnipLink.appendLink(writer, hits.doc(i).get("title"));
-            if (i < end - 1) {
-              writer.write(", ");
-            }
+          String snipName = hits.doc(i).get("title");
+        	  Snip snip = space.load(snipName);
+        	   if(snip!=null) { 
+             SnipLink.appendLink(writer, snip);  
+        	    }
+        	   else {
+        		  writer.write("-");
+        		  SnipLink.appendLink(writer, snipName);
+        	   }
+        	   if (i < end - 1) {
+                   writer.write(", ");
+           }
           }
           writer.write("</blockquote></div>");
         } catch (IOException e) {

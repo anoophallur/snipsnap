@@ -22,24 +22,27 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="<c:out value='${app.configuration.locale}'/>" xml:lang="<c:out value='${app.configuration.locale}'/>">
  <head>
+
+  <META name="verify-v1" content="zyRWD2PUpwvTzh/xP40dtBvzkjWd35taLJ6bPL9mkQU=" /> 
   <!-- base of this document to make all links relative -->
   <base href="<c:out value='${app.configuration.url}/'/>"/>
   <!-- content type and generator -->
   <meta http-equiv="Content-Type" content="text/html; charset=<c:out value='${app.configuration.encoding}'/>"/>
   <meta http-equiv="Generator" content="SnipSnap/<c:out value="${app.configuration.version}"/>"/>
+  
+  <!-- meta information for SEO -->
+  <meta name="keywords" content="software, technology, blog, blogging, security, adsense, java, programming, snipsnap, fenix, fenixedu" />
+ 
+  <meta name="author" content="Paulo Abrantes"/>
+
   <!-- dublin core classification and geographic location information -->
   <s:dublinCore snip="${snip}"/>
   <s:geoUrl/>
   <!-- aggregrator related info -->
   <link rel="EditURI" type="application/rsd+xml" title="RSD" href="<c:out value='${app.configuration.url}/exec/rsd'/>"/>
-  <c:choose>
-   <c:when test="${snip.notWeblog}">
-    <link rel="alternate" type="application/rss+xml" title="RSS" href="<c:out value='${app.configuration.url}/exec/rss'/>"/>
-   </c:when>
-   <c:otherwise>
-    <link rel="alternate" type="application/rss+xml" title="RSS" href="<c:out value='${app.configuration.url}/exec/rss?snip=${snip.nameEncoded}'/>"/>
-   </c:otherwise>
-  </c:choose>
+  
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="http://feeds.feedburner.com/PabrantesWeblog"/>
+
   <link rel="index" href="<c:out value='${app.configuration.url}/space/snipsnap-index'/>"/>
   <!-- icons and stylesheet -->
   <link rel="shortcut icon" href="<c:out value='${app.configuration.url}/favicon.ico'/>"/>
@@ -47,8 +50,18 @@
   <link rel="STYLESHEET" type="text/css" href="<c:out value='${app.configuration.url}/theme/default.css'/>" />
   <link rel="STYLESHEET" type="text/css" href="<c:out value='${app.configuration.url}/theme/print.css'/>" media="print" />
   <!-- title of this document -->
-  <title><c:out value="${app.configuration.name}" default="SnipSnap"/> :: <c:out value="${snip.name}"/></title>
- </head>
+  <title>
+	<c:choose>
+	<c:when test="${snip.weblog}">
+	 <c:out value="${app.configuration.name}" default="SnipSnap"/> :: <c:out value="${app.configuration.tagline}"/>
+	</c:when>
+	<c:otherwise>
+	 <c:out value="${snip.title}"/>
+	</c:otherwise>
+	</c:choose>
+  </title>
+<script defer="defer" id="snap_preview_anywhere" type="text/javascript" src="http://spa.snap.com/snap_preview_anywhere.js?ap=1&amp;key=72d9f9c9911fba283c4de8fcb132ff05&amp;sb=1&amp;domain=www.pabrantes.net"></script> 
+</head>
  <body>
   <div id="page-logo">
    <c:choose>
