@@ -94,7 +94,7 @@ public class NewUserServlet extends HttpServlet {
       email = email != null ? email : "";
 
 
-      if(!isResponseCorrect(request)) {
+      if(!isResponseCorrect(request).booleanValue()) {
     	       errors.put("login",ERR_WRONG_IMAGE);
     	       sendError(session, errors, request, response);
     	       return;       
@@ -152,10 +152,10 @@ public class NewUserServlet extends HttpServlet {
     }
   }
 
-  private boolean isResponseCorrect(HttpServletRequest request) {
+  private Boolean  isResponseCorrect(HttpServletRequest request) {
 	  String captchaId = request.getSession().getId();
       String response = request.getParameter("j_captcha_response");
-      boolean isResponseCorrect = false;
+      Boolean isResponseCorrect = Boolean.FALSE;
        try {
            isResponseCorrect = JCaptchaSingleton.getInstance().validateResponseForID(captchaId,
                    response);
