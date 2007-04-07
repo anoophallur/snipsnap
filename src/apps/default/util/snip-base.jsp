@@ -55,7 +55,7 @@
 	  </c:if>
 	  
 	  <c:if test="${app.configuration.featureCommentsRssShow == 'true'}">
-	      <a href="<c:out value='${app.realPath}'/>/exec/rss?snip=<c:out value='${snip.name}'/>&amp;type=commentsForPost"><img src="theme/images/rss-icon.png"/></a>
+	      <a href="<c:out value='${app.configuration.realPath}'/>/exec/rss?snip=<c:out value='${snip.name}'/>&amp;type=commentsForPost"><img src="theme/images/rss-icon.png"/></a>
 	  </c:if>
 	 </div>
      <div class="snip-label">
