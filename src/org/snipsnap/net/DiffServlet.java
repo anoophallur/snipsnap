@@ -51,7 +51,7 @@ public class DiffServlet extends HttpServlet {
     throws IOException, ServletException {
 
     String name = request.getParameter("name");
-    if (null == name) {
+    if (null == name || name.equals("SnipSnap/config")) {
       Configuration config = Application.get().getConfiguration();
       response.sendRedirect(config.getUrl("/space/"+config.getStartSnip()));
       return;
