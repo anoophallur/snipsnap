@@ -26,6 +26,10 @@ public abstract class MockSnip implements Snip {
     return null;
   }
 
+  public String getUrl() {
+	  return null;
+  }
+  
   public String getOwner() {
     return null;
   }

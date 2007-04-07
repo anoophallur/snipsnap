@@ -31,6 +31,7 @@ import org.snipsnap.feeder.Feeder;
 import org.snipsnap.feeder.FeederRepository;
 import org.snipsnap.render.PlainTextRenderEngine;
 import org.snipsnap.semanticweb.rss.BlogFeeder;
+import org.snipsnap.semanticweb.rss.CommentsForPostFeeder;
 import org.snipsnap.snip.Snip;
 import org.snipsnap.snip.SnipSpace;
 import org.snipsnap.snip.SnipSpaceFactory;
@@ -42,73 +43,80 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
 /**
  * Load a snip for output as RSS
- *
+ * 
  * @author Stephan J. Schmidt
  * @version $Id: RssServlet.java 1679 2004-06-24 14:16:19Z leo $
  */
 public class RssServlet extends HttpServlet {
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-          throws IOException, ServletException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
-    SnipSpace space = SnipSpaceFactory.getInstance();
-    Configuration config = Application.get().getConfiguration();
+		SnipSpace space = SnipSpaceFactory.getInstance();
+		Configuration config = Application.get().getConfiguration();
 
-    String eTag = request.getHeader("If-None-Match");
-    if (null != eTag && eTag.equals(space.getETag())) {
-      response.setHeader("ETag", space.getETag());
-      response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-      return;
-    } else {
-      String version = request.getParameter("version");
-      String type = request.getParameter("type");
-      String sourceSnipName = request.getParameter("snip");
+		String eTag = request.getHeader("If-None-Match");
+		if (null != eTag && eTag.equals(space.getETag())) {
+			response.setHeader("ETag", space.getETag());
+			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+			return;
+		} else {
+			String version = request.getParameter("version");
+			String type = request.getParameter("type");
+			String sourceSnipName = request.getParameter("snip");
 
-      if (null == sourceSnipName) {
-        sourceSnipName = config.getStartSnip();
-      }
+			if (null == sourceSnipName) {
+				sourceSnipName = config.getStartSnip();
+			}
 
-      Snip sourceSnip = space.load(sourceSnipName);
+			Snip sourceSnip = space.load(sourceSnipName);
 
-      Object object = Components.getComponent(PlainTextRenderEngine.class);
-      System.err.println("object = " + object.getClass());
+			Object object = Components
+					.getComponent(PlainTextRenderEngine.class);
+			System.err.println("object = " + object.getClass());
 
-      FeederRepository repository = (FeederRepository) Components.getComponent(FeederRepository.class);
+			FeederRepository repository = (FeederRepository) Components
+					.getComponent(FeederRepository.class);
 
-      Feeder feeder = (Feeder) repository.get(type);
+			Feeder feeder;
+			if (type == null || !type.equals("commentsForPost")) {
+				feeder = (Feeder) repository.get(type);
+			} else {
+				feeder = new CommentsForPostFeeder(sourceSnipName);
+			}
 
-//      System.out.println("Feeder repository: "+repository.getPlugins());
-      if (null == feeder || "blog".equals(feeder.getName())) {
-        if (sourceSnip.isWeblog()) {
-          feeder = new BlogFeeder(sourceSnipName);
-        } else {
-          feeder = new BlogFeeder();
-        }
-      }
+			// System.out.println("Feeder repository:
+			// "+repository.getPlugins());
+			if (null == feeder || "blog".equals(feeder.getName())) {
+				if (sourceSnip.isWeblog()) {
+					feeder = new BlogFeeder(sourceSnipName);
+				} else {
+					feeder = new BlogFeeder();
+				}
+			}
 
-      Snip snip = feeder.getContextSnip();
+			Snip snip = feeder.getContextSnip();
 
-      request.setAttribute("snip", snip);
-      request.setAttribute("rsssnips", feeder.getFeed());
-      request.setAttribute("space", space);
-      request.setAttribute("config", config);
+			request.setAttribute("snip", snip);
+			request.setAttribute("rsssnips", feeder.getFeed());
+			request.setAttribute("space", space);
+			request.setAttribute("config", config);
 
-      request.setAttribute("url", config.getUrl("/space"));
+			request.setAttribute("url", config.getUrl("/space"));
 
-      RequestDispatcher dispatcher;
-      if ("1.0".equals(version)) {
-        dispatcher = request.getRequestDispatcher("/rdf.jsp");
-      } else if ("0.92".equals(version)) {
-        dispatcher = request.getRequestDispatcher("/rss.jsp");
-      } else if ("plain".equals(version)) {
-        dispatcher = request.getRequestDispatcher("/plain.jsp");
-      } else {
-        dispatcher = request.getRequestDispatcher("/rss2.jsp");
-      }
+			RequestDispatcher dispatcher;
+			if ("1.0".equals(version)) {
+				dispatcher = request.getRequestDispatcher("/rdf.jsp");
+			} else if ("0.92".equals(version)) {
+				dispatcher = request.getRequestDispatcher("/rss.jsp");
+			} else if ("plain".equals(version)) {
+				dispatcher = request.getRequestDispatcher("/plain.jsp");
+			} else {
+				dispatcher = request.getRequestDispatcher("/rss2.jsp");
+			}
 
-      dispatcher.forward(request, response);
-    }
-  }
+			dispatcher.forward(request, response);
+		}
+	}
 }

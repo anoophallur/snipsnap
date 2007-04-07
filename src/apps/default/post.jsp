@@ -38,5 +38,6 @@
      <fmt:param><fmt:message key="weblog.post.as.editor"/></fmt:param>
    </fmt:message>
   </s:check>
+  
  </div>
 </div>

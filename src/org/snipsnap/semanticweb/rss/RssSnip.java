@@ -349,4 +349,8 @@ public class RssSnip implements Snip {
   public Snip copy(String newName) {
     return new RssSnip(snip, content, title, url);
   }
+  
+	public String getUrl() {
+		return null;
+	}
 }

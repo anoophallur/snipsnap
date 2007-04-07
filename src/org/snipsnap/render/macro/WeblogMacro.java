@@ -138,16 +138,25 @@ public class WeblogMacro extends SnipMacro {
 
       Configuration conf = Application.get().getConfiguration();
 
+      writer.write("<br/><div class=\"share-class-blog\">");
+      if(conf.getFeatureDiggItLinkShow().equals("true")) {
+    	  	writer.write("<a href=\"http://digg.com/submit?phase=2&amp;url=" + getURLFromLink(entry.getLink()) +"&amp;title=" + entry.getTitle() + "\">");
+    	  	SnipLink.appendImage(writer, "digg", "Digg it");
+    		writer.write("</a> ");
+      }
+      if(conf.getFeatureDeliciousLinkShow().equals("true")) {
+    	  writer.write("<a href=\"http://del.icio.us/post?url=" +getURLFromLink(entry.getLink()) +"&amp;title=" + entry.getTitle() + "\">");
+    	  SnipLink.appendImage(writer, "delicious", "Save to Delicious");
+      writer.write("</a> ");
+      }
+      if(conf.getFeatureCommentsRssShow().equals("true")) {
+    	  	writer.write("<a href=\"/exec/rss?snip=" + entry.getName() + "&amp;type=comments\">");
+    	  	SnipLink.appendImage(writer, "rss-icon", "Comments Feed");
+    	  	writer.write("</a> ");
+      }
+      writer.write("</div>");
       writer.write(entry.getXMLContent());
-      writer.write(" <a href=\"");
-      SnipLink.appendUrl(writer, entry.getName());
-      writer.write("\" title=\"");
-      MessageFormat mf = new MessageFormat(ResourceManager.getString("i18n.messages", "macro.anchor.permalink"));
-      writer.write(mf.format(new Object[]{entry.getName()}));
-      writer.write("\">");
-      SnipLink.appendImage(writer, "Icon-Permalink", "PermaLink");
-      writer.write("</a>");
-
+ 
       writer.write("<div class=\"snip-post-comments\">");
       writer.write(entry.getComments().getCommentString());
       writer.write(" | ");
@@ -161,4 +170,8 @@ public class WeblogMacro extends SnipMacro {
       }
     }
   }
+ 
+  private String getURLFromLink(String link) {
+		return link.substring(link.indexOf("=\"") + 2, link.indexOf("\">")); 
+	}
 }

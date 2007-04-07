@@ -29,6 +29,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.radeox.api.engine.context.InitialRenderContext;
 import org.radeox.macro.PluginRepository;
+import org.snipsnap.semanticweb.rss.CommentsForPostFeeder;
 
 import java.util.*;
 
@@ -36,6 +37,7 @@ import java.util.*;
  * Repository for feeders
  *
  * @author Stephan J. Schmidt
+ * @author Paulo Abrantes
  * @version $Id: BasicFeederRepository.java 1606 2004-05-17 10:56:18Z leo $
  */
 
@@ -63,6 +65,7 @@ public class BasicFeederRepository extends PluginRepository implements FeederRep
       Feeder feeder = (Feeder) iterator.next();
       newPlugins.put(feeder.getName(), feeder);
     }
+    
     plugins = newPlugins;
   }
 

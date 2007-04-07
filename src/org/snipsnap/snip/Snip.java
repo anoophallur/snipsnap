@@ -211,5 +211,8 @@ public interface Snip extends Linkable, Ownable, Nameable, Appendable {
 
   public String getTitle();
 
+  public String getUrl();
+  
   public Snip copy(String newName);
+
 }

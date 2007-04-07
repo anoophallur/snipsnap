@@ -45,6 +45,19 @@
 <div class="snip-content">
   <c:if test="${snip.notWeblog}">
    <div class="snip-meta">
+ 	<div class="share-class">
+	  <c:if test="${app.configuration.featureDiggItLinkShow == 'true'}">
+	 	<a href="http://digg.com/submit?phase=2&amp;url=<c:out value='${snip.url}'/>&amp;title=<c:out value='${snip.title}'/>"><img src="theme/images/digg.png"/></a>
+	  </c:if>
+	  
+	  <c:if test="${app.configuration.featureDeliciousLinkShow == 'true'}">
+	  	<a href="http://del.icio.us/post?url=<c:out value='${snip.url}'/>&amp;title=<c:out value='${snip.title}'/>"><img src="theme/images/delicious.png"/></a>
+	  </c:if>
+	  
+	  <c:if test="${app.configuration.featureCommentsRssShow == 'true'}">
+	      <a href="/exec/rss?snip=<c:out value='${snip.name}'/>&amp;type=comments"><img src="theme/images/rss-icon.png"/></a>
+	  </c:if>
+	 </div>
      <div class="snip-label">
        <div>
          <s:check roles="Authenticated" permission="Edit" snip="${snip}">[<a href="exec/labels?snipname=<c:out value='${snip.nameEncoded}'/>"><fmt:message key="menu.labels.add"/></a>]</s:check>

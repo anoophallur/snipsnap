@@ -629,4 +629,9 @@ public class SnipImpl implements Snip {
 		space.store(newSnip);
 		return newSnip;
 	}
+	
+	public String getUrl() {
+		String link = getLink();
+		return link.substring(link.indexOf("=\"") + 2, link.indexOf("\">")); 
+	}
 }
