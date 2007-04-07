@@ -150,7 +150,7 @@ public class WeblogMacro extends SnipMacro {
       writer.write("</a> ");
       }
       if(conf.getFeatureCommentsRssShow().equals("true")) {
-    	  	writer.write("<a href=\"/exec/rss?snip=" + entry.getName() + "&amp;type=comments\">");
+    	  	writer.write("<a href=\"" + conf.getRealPath() + "/exec/rss?snip=" + entry.getName() + "&amp;type=comments\">");
     	  	SnipLink.appendImage(writer, "rss-icon", "Comments Feed");
     	  	writer.write("</a> ");
       }
