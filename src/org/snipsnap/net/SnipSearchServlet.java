@@ -4,6 +4,8 @@
  * Copyright (c) 2002 Stephan J. Schmidt, Matthias L. Jugel
  * All Rights Reserved.
  *
+ * Copyright (C) 2006-2007 Paulo Abrantes
+ * 
  * Please visit http://snipsnap.org/ for updates and contact.
  *
  * --LICENSE NOTICE--
@@ -24,12 +26,7 @@
  */
 package org.snipsnap.net;
 
-import org.apache.lucene.search.Hits;
-import org.snipsnap.snip.SnipLink;
-import org.snipsnap.snip.SnipSpace;
-import org.snipsnap.snip.SnipSpaceFactory;
-import org.snipsnap.config.Configuration;
-import org.snipsnap.app.Application;
+import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -37,7 +34,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+
+import org.apache.lucene.search.Hits;
+import org.snipsnap.app.Application;
+import org.snipsnap.config.Configuration;
+import org.snipsnap.snip.SnipSpace;
+import org.snipsnap.snip.SnipSpaceFactory;
+import org.snipsnap.util.URLEncoderDecoder;
 
 /**
  * Load a snip to view.
@@ -49,11 +52,14 @@ public class SnipSearchServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     String query = request.getParameter("query");
+    Configuration config = Application.get().getConfiguration();
+    
     if (query != null && query.length() > 0) {
-      HttpSession session = request.getSession();
+      String encodedQuery = URLEncoderDecoder.encode(query,config.getEncoding());
+    	  HttpSession session = request.getSession();
       SnipSpace space = SnipSpaceFactory.getInstance();
-      Hits hits = space.search(query);
-      session.setAttribute("query", query);
+      Hits hits = space.search(encodedQuery);
+      session.setAttribute("query", encodedQuery);
       session.setAttribute("hits", hits);
       session.setAttribute("startIndex", new Integer(0));
       RequestDispatcher dispatcher = request.getRequestDispatcher("/exec/search.jsp");
@@ -61,7 +67,6 @@ public class SnipSearchServlet extends HttpServlet {
       return;
     }
 
-    Configuration config = Application.get().getConfiguration();
     response.sendRedirect(config.getUrl());
   }
 

@@ -33,12 +33,14 @@ import org.radeox.macro.parameter.MacroParameter;
 import org.radeox.util.i18n.ResourceManager;
 import org.radeox.util.logging.Logger;
 import org.snipsnap.app.Application;
+import org.snipsnap.config.Configuration;
 import org.snipsnap.container.Components;
 import org.snipsnap.snip.Snip;
 import org.snipsnap.snip.SnipLink;
 import org.snipsnap.snip.SnipSpace;
 import org.snipsnap.snip.SnipSpaceFactory;
 import org.snipsnap.user.AuthenticationService;
+import org.snipsnap.util.URLEncoderDecoder;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -52,7 +54,8 @@ import java.text.MessageFormat;
  * macro.
  *
  * @author stephan
- * @version $Id: SearchMacro.java 1828 2005-04-28 10:07:57Z leo $
+ * @author Paulo abrantes
+ * @version $Id: SearchMacro.java 1828 2007-04-07 10:07:57Z leo $
  */
 
 public class SearchMacro extends BaseMacro {
@@ -76,12 +79,14 @@ public class SearchMacro extends BaseMacro {
   public void execute(Writer writer, MacroParameter params)
       throws IllegalArgumentException, IOException {
 
+	Configuration config = Application.get().getConfiguration();
+	
     if (params.getLength() == 1 || params.getLength() == 2) {
       int maxHits = 10;
       if (params.getLength() == 2) {
         maxHits = Integer.parseInt(params.get("1"));
       }
-      String searchString = params.get("0");
+      String searchString = URLEncoderDecoder.encode(params.get("0"),config.getEncoding());
 
       Hits hits = null;
       try {
