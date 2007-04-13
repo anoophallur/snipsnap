@@ -4,6 +4,8 @@
  * Copyright (c) 2002 Stephan J. Schmidt, Matthias L. Jugel
  * All Rights Reserved.
  *
+ * Copyright (c) 2006-2007 Paulo Abrantes
+ * 
  * Please visit http://snipsnap.org/ for updates and contact.
  *
  * --LICENSE NOTICE--
@@ -24,6 +26,14 @@
  */
 package org.snipsnap.net;
 
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.snipsnap.app.Application;
 import org.snipsnap.config.Configuration;
 import org.snipsnap.container.Components;
@@ -31,22 +41,16 @@ import org.snipsnap.feeder.Feeder;
 import org.snipsnap.feeder.FeederRepository;
 import org.snipsnap.render.PlainTextRenderEngine;
 import org.snipsnap.semanticweb.rss.BlogFeeder;
-import org.snipsnap.semanticweb.rss.CommentsForPostFeeder;
 import org.snipsnap.snip.Snip;
 import org.snipsnap.snip.SnipSpace;
 import org.snipsnap.snip.SnipSpaceFactory;
-
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * Load a snip for output as RSS
  * 
  * @author Stephan J. Schmidt
+ * @author Paulo Abrantes (pabrantes@pabrantes.net)
+ * 
  * @version $Id: RssServlet.java 1679 2004-06-24 14:16:19Z leo $
  */
 public class RssServlet extends HttpServlet {
@@ -80,25 +84,15 @@ public class RssServlet extends HttpServlet {
 					.getComponent(FeederRepository.class);
 
 			Feeder feeder;
-			if (type == null || !type.equals("commentsForPost")) {
-				feeder = (Feeder) repository.get(type);
+			feeder = (Feeder) repository.get(type);
+			if (feeder == null) {
+				feeder = new BlogFeeder(Application.get().getConfiguration()
+						.getStartSnip());
 			} else {
-				feeder = new CommentsForPostFeeder(sourceSnipName);
+				feeder.setContextSnip(sourceSnip);
 			}
-
-			// System.out.println("Feeder repository:
-			// "+repository.getPlugins());
-			if (null == feeder || "blog".equals(feeder.getName())) {
-				if (sourceSnip.isWeblog()) {
-					feeder = new BlogFeeder(sourceSnipName);
-				} else {
-					feeder = new BlogFeeder();
-				}
-			}
-
-			Snip snip = feeder.getContextSnip();
-
-			request.setAttribute("snip", snip);
+			
+			request.setAttribute("snip", sourceSnip);
 			request.setAttribute("rsssnips", feeder.getFeed());
 			request.setAttribute("space", space);
 			request.setAttribute("config", config);

@@ -20,7 +20,7 @@
   ** @version $Id: rss2.jsp 1606 2004-05-17 10:56:18Z leo $
   --%>
   <channel>
-    <title><c:out value="${config.name}" escapeXml="true"/></title>
+    <title><c:out value="${config.name} - ${snip.title}" escapeXml="true"/></title>
     <%-- usually points to "start" --%>
     <link><c:out value="${url}/${snip.nameEncoded}" escapeXml="true"/></link>
     <description><c:out value="${config.tagline}" escapeXml="true"/></description>

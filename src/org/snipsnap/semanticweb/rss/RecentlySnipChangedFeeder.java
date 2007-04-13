@@ -4,6 +4,8 @@
  * Copyright (c) 2002 Stephan J. Schmidt, Matthias L. Jugel
  * All Rights Reserved.
  *
+ * Copyright (c) 2006-2007 Paulo Abrantes
+ * 
  * Please visit http://radeox.org/ for updates and contact.
  *
  * --LICENSE NOTICE--
@@ -25,14 +27,13 @@
 
 package org.snipsnap.semanticweb.rss;
 
-import org.snipsnap.snip.Blog;
-import org.snipsnap.snip.SnipSpaceFactory;
-import org.snipsnap.snip.Snip;
-import org.snipsnap.snip.SnipSpace;
+import java.util.List;
+
 import org.snipsnap.app.Application;
 import org.snipsnap.feeder.Feeder;
-
-import java.util.List;
+import org.snipsnap.snip.Snip;
+import org.snipsnap.snip.SnipSpace;
+import org.snipsnap.snip.SnipSpaceFactory;
 
 /*
  * Generates a feed of recently changed snips which can then be
@@ -57,10 +58,14 @@ public class RecentlySnipChangedFeeder implements Feeder {
   public List getFeed() {
     List changed = space.getChanged(10);
     return changed;
-  };
+  }
 
   public Snip getContextSnip() {
     String startName = Application.get().getConfiguration().getStartSnip();
     return space.load(startName);
+  }
+
+  public void setContextSnip(Snip snip) {
+	// Do nothing	
   }
 }

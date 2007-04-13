@@ -33,34 +33,39 @@ import org.snipsnap.feeder.Feeder;
 import java.util.List;
 
 /*
- * Generates a feed of snips from a blog which can then be
- * serialized to RSS, RDF, Atom, ...
- *
+ * Generates a feed of snips from a blog which can then be serialized to RSS,
+ * RDF, Atom, ...
+ * 
  * @author stephan
  * @team sonicteam
+ * @author Paulo Abrantes
  * @version $Id: BlogFeeder.java 1606 2004-05-17 10:56:18Z leo $
  */
 
 public class BlogFeeder implements Feeder {
-  private Blog blog;
+	private Blog blog;
 
-  public BlogFeeder() {
-    blog = SnipSpaceFactory.getInstance().getBlog();
-  }
+	public BlogFeeder() {
+		blog = SnipSpaceFactory.getInstance().getBlog();
+	}
 
-  public BlogFeeder(String blogName) {
-    blog = SnipSpaceFactory.getInstance().getBlog(blogName);
-  }
+	public BlogFeeder(String blogName) {
+		blog = SnipSpaceFactory.getInstance().getBlog(blogName);
+	}
 
-  public String getName() {
-    return "blog";
-  }
+	public String getName() {
+		return "blog";
+	}
 
-  public List getFeed() {
-      return blog.getFlatPosts();
-  };
+	public List getFeed() {
+		return blog.getFlatPosts();
+	}
 
-  public Snip getContextSnip() {
-    return blog.getSnip();
-  }
+	public Snip getContextSnip() {
+		return blog.getSnip();
+	}
+
+	public void setContextSnip(Snip snip) {
+		blog = SnipSpaceFactory.getInstance().getBlog(snip.getName());
+	}
 }

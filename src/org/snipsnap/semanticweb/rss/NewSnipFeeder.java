@@ -4,6 +4,8 @@
  * Copyright (c) 2002 Stephan J. Schmidt, Matthias L. Jugel
  * All Rights Reserved.
  *
+ * Copyright (c) 2006-2007 Paulo Abrantes
+ *
  * Please visit http://radeox.org/ for updates and contact.
  *
  * --LICENSE NOTICE--
@@ -25,17 +27,16 @@
 
 package org.snipsnap.semanticweb.rss;
 
-import org.snipsnap.snip.Blog;
-import org.snipsnap.snip.SnipSpaceFactory;
-import org.snipsnap.snip.Snip;
-import org.snipsnap.snip.SnipSpace;
-import org.snipsnap.snip.storage.query.QueryKit;
-import org.snipsnap.snip.storage.query.Query;
-import org.snipsnap.snip.storage.query.SnipQuery;
+import java.util.List;
+
 import org.snipsnap.app.Application;
 import org.snipsnap.feeder.Feeder;
-
-import java.util.List;
+import org.snipsnap.snip.Snip;
+import org.snipsnap.snip.SnipSpace;
+import org.snipsnap.snip.SnipSpaceFactory;
+import org.snipsnap.snip.storage.query.Query;
+import org.snipsnap.snip.storage.query.QueryKit;
+import org.snipsnap.snip.storage.query.SnipQuery;
 
 /*
  * Generates a feed of new snips without comments from a space which can then be
@@ -43,12 +44,13 @@ import java.util.List;
  *
  * @author stephan
  * @team sonicteam
+ * @author Paulo Abrantes
  * @version $Id: NewSnipFeeder.java 1606 2004-05-17 10:56:18Z leo $
  */
 
 public class NewSnipFeeder implements Feeder {
   private SnipSpace space;
-  private String snipName;
+  
   private Query newAndNotCommentQuery = new SnipQuery() {
       public boolean fit(Snip snip) {
         return isComment(snip) && (snip.getVersion() == 0);
@@ -56,12 +58,7 @@ public class NewSnipFeeder implements Feeder {
     };
 
   public NewSnipFeeder() {
-    this(Application.get().getConfiguration().getStartSnip());
-  }
-
-  private NewSnipFeeder(String snipName) {
-    this.snipName = snipName;
-    space = SnipSpaceFactory.getInstance();
+	  space = SnipSpaceFactory.getInstance();
   }
 
   public String getName() {
@@ -74,9 +71,14 @@ public class NewSnipFeeder implements Feeder {
   }
 
   public Snip getContextSnip() {
-    return space.load(snipName);
+	    String startName = Application.get().getConfiguration().getStartSnip();
+	    return space.load(startName);
   }
 
+  public void setContextSnip(Snip snip) {
+	  // Do nothing
+  }
+  
   public boolean isComment(Snip snip) {
     return (snip.getName().indexOf("comment") >=0);
   }

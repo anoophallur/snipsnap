@@ -25,16 +25,15 @@
 
 package org.snipsnap.semanticweb.rss;
 
-import org.snipsnap.snip.Blog;
-import org.snipsnap.snip.SnipSpaceFactory;
-import org.snipsnap.snip.Snip;
-import org.snipsnap.snip.SnipSpace;
-import org.snipsnap.snip.storage.query.QueryKit;
-import org.snipsnap.snip.storage.query.Query;
+import java.util.List;
+
 import org.snipsnap.app.Application;
 import org.snipsnap.feeder.Feeder;
-
-import java.util.List;
+import org.snipsnap.snip.Snip;
+import org.snipsnap.snip.SnipSpace;
+import org.snipsnap.snip.SnipSpaceFactory;
+import org.snipsnap.snip.storage.query.Query;
+import org.snipsnap.snip.storage.query.QueryKit;
 
 /*
  * Generates a feed of comment snips from a space which can then be
@@ -42,12 +41,13 @@ import java.util.List;
  *
  * @author stephan
  * @team sonicteam
+ * @author Paulo Abrantes
  * @version $Id: NewCommentFeeder.java 1606 2004-05-17 10:56:18Z leo $
  */
 
 public class NewCommentFeeder implements Feeder {
   private SnipSpace space;
-  private String snipName;
+  
   private Query commentQuery = new Query() {
       public boolean fit(Object object) {
         return isComment((Snip) object);
@@ -55,14 +55,9 @@ public class NewCommentFeeder implements Feeder {
     };
 
   public NewCommentFeeder() {
-    this(Application.get().getConfiguration().getStartSnip());
-  }
-
-  public NewCommentFeeder(String snipName) {
-    this.snipName = snipName;
     space = SnipSpaceFactory.getInstance();
   }
-
+  
   public String getName() {
     return "comments";
   }
@@ -73,10 +68,16 @@ public class NewCommentFeeder implements Feeder {
   }
 
   public Snip getContextSnip() {
-    return space.load(snipName);
+	    String startName = Application.get().getConfiguration().getStartSnip();
+	    return space.load(startName);
+  }
+
+  public void setContextSnip(Snip snip) {
+	  // Do nothing
   }
 
   public boolean isComment(Snip snip) {
     return (snip.getName().indexOf("comment") >=0);
   }
-}
+
+ }

@@ -36,11 +36,13 @@ import java.util.List;
  *
  * @author stephan
  * @team sonicteam
+ * @author Paulo abrantes
  * @version $Id: Feeder.java 1606 2004-05-17 10:56:18Z leo $
  */
 
 public interface Feeder {
   public List getFeed();
   public String getName();
+  public void setContextSnip(Snip snip);
   public Snip getContextSnip();
 }
