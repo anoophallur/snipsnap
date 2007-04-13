@@ -25,24 +25,23 @@
 
 package org.snipsnap.snip;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Iterator;
+
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.snipsnap.snip.label.Label;
-import org.snipsnap.snip.label.Labels;
+import org.radeox.api.engine.RenderEngine;
+import org.radeox.api.engine.WikiRenderEngine;
+import org.radeox.api.engine.context.RenderContext;
+import org.radeox.engine.context.BaseInitialRenderContext;
+import org.radeox.engine.context.BaseRenderContext;
 import org.radeox.filter.LinkTestFilter;
 import org.radeox.filter.context.BaseFilterContext;
 import org.radeox.filter.context.FilterContext;
-import org.radeox.engine.context.BaseRenderContext;
-import org.radeox.engine.context.BaseInitialRenderContext;
-import org.radeox.api.engine.WikiRenderEngine;
-import org.radeox.api.engine.RenderEngine;
-import org.radeox.api.engine.context.RenderContext;
-import org.radeox.test.filter.mock.MockWikiRenderEngine;
-
-import java.util.Iterator;
-import java.io.Writer;
-import java.io.IOException;
-import java.io.Reader;
+import org.snipsnap.snip.label.Label;
+import org.snipsnap.snip.label.Labels;
 
 /**
  * Prepares a snip for indexing by lucene. Lucene needs
