@@ -2,6 +2,7 @@
  <%--
   ** Registration page template.
   ** @author Matthias L. Jugel
+  ** @author Paulo Abrantes
   ** @version $Id: register.jsp 1728 2004-08-16 10:22:24Z leo $
   --%>
 
@@ -15,7 +16,13 @@
   <div class="error"><fmt:message key="${error.value}"/></div>
  </c:forEach>
  <div class="snip-content">
-  <form class="form" method="post" action="exec/newuser" enctype="multipart/form-data">
+ <c:if test="${app.configuration.featureSecureRegisterEnabled == true}">
+  <form class="form" method="post" action="<c:out value='https://${app.configuration.realHost}/${app.configuration.path}/exec/newuser'/>" enctype="multipart/form-data">
+ </c:if>
+ <c:if test="${app.configuration.featureSecureRegisterEnabled == false}">
+  <form class="form" method="post" action="exec/newuser" enctype="multipart/form-data"> 
+ </c:if>
+ 
    <table>
     <tr <c:if test="${errors['login'] != null}">class="error-position"</c:if>>
      <td><label for="login"><fmt:message key="login.user.name"/></label></td><td><input id="login" name="login" type="text" size="20" value="<c:out value="${param['login']}"/>"/></td><td></td></tr>

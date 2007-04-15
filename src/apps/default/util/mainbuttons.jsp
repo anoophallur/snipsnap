@@ -7,9 +7,31 @@
  <c:otherwise><a href="space/<c:out value='${app.configuration.startSnip}'/>"><fmt:message key="menu.start"/></a></c:otherwise>
 </c:choose> | <a href="space/snipsnap-index"><fmt:message key="menu.index"/></a> |
 <s:check roles="Authenticated"><fmt:message key="menu.loggedIn"><fmt:param value="${app.user.login}"/></fmt:message> | <a href="exec/authenticate?logoff=true"><fmt:message key="menu.logoff"/></a></s:check>
-<s:check roles="Authenticated" invert="true"><a href="<c:out value='https://${app.configuration.realHost}/${app.configuration.path}/exec/login.jsp'/>"><fmt:message key="menu.login"/></a>
+<s:check roles="Authenticated" invert="true">
+
+<c:if test="${app.configuration.featureSecureLoginEnabled == true}">
+	<a href="<c:out value='https://${app.configuration.realHost}/${app.configuration.path}/exec/login.jsp'/>">
+	<fmt:message key="menu.login"/>
+	</a>
+</c:if>
+<c:if test="${app.configuration.featureSecureLoginEnabled == false}">
+	<a href="exec/login.jsp">
+		<fmt:message key="menu.login"/>
+	</a>
+</c:if>
+
 <c:if test="${app.configuration.allowRegister}">
-  <fmt:message key="menu.or"/> <a href="exec/register.jsp"><fmt:message key="menu.register"/></a>
+  <fmt:message key="menu.or"/> 
+  <c:if test="${app.configuration.featureSecureRegisterEnabled == true}">
+	 <a href="<c:out value='https://${app.configuration.realHost}/${app.configuration.path}/exec/register.jsp'/>">
+	  <fmt:message key="menu.register"/>
+	 </a>
+</c:if>
+
+<c:if test="${app.configuration.featureSecureRegisterEnabled == false}">
+ 	<a href="exec/register.jsp"><fmt:message key="menu.register"/></a>
+</c:if>
+ 
 </c:if>
 </s:check>
 <s:check snip="${requestScope.snip}" roles="Owner:Editor"> |

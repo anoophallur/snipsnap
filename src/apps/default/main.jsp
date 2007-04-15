@@ -31,10 +31,14 @@
   <meta http-equiv="Generator" content="SnipSnap/<c:out value="${app.configuration.version}"/>"/>
   
   <!-- meta information for SEO -->
-  <meta name="keywords" content="software, technology, blog, blogging, security, adsense, java, programming, snipsnap, fenix, fenixedu" />
- 
-  <meta name="author" content="Paulo Abrantes"/>
-
+  <c:if test="${app.configuration.featureMetaKeywordsEnabled == true}">
+  	<meta name="keywords" content="<c:out value='${app.configuration.featureMetaKeywords}'/>" />
+  </c:if>
+  
+  <c:if test="${app.configuration.featureMetaAuthorEnabled == true}">
+  	<meta name="author" content="<c:out value='${app.configuration.featureMetaAuthor}'/>"/>
+  </c:if>
+  
   <!-- dublin core classification and geographic location information -->
   <s:dublinCore snip="${snip}"/>
   <s:geoUrl/>
@@ -60,7 +64,14 @@
 	</c:otherwise>
 	</c:choose>
   </title>
-<script defer="defer" id="snap_preview_anywhere" type="text/javascript" src="http://spa.snap.com/snap_preview_anywhere.js?ap=1&amp;key=72d9f9c9911fba283c4de8fcb132ff05&amp;sb=1&amp;domain=www.pabrantes.net"></script> 
+
+<!-- 72d9f9c9911fba283c4de8fcb132ff05 -->
+
+<c:if test="${app.configuration.featureSnapPreviewEnabled == true}"> 
+<script defer="defer" id="snap_preview_anywhere" type="text/javascript" src="http://spa.snap.com/snap_preview_anywhere.js?ap=1&amp;key=<c:out value='${app.configuration.featureSnapPreviewUserKey}'/>&amp;sb=1&amp;domain=<c:out value='${app.configuration.realHost}'/>"></script> 
+
+</c:if>
+
 </head>
  <body>
   <div id="page-logo">

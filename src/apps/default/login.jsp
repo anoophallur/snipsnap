@@ -1,6 +1,7 @@
 <%--
   ** Template for a login screen.
   ** @author Matthias L. Jugel
+  ** @author Paulo Abrantes
   ** @version $Id: login.jsp 1716 2004-07-16 14:33:35Z leo $
   --%>
 
@@ -22,7 +23,13 @@
     <p/>
    </c:if>
    <%-- the login form --%>
-   <form class="form" method="post" action="<c:out value='https://${app.configuration.realHost}/${app.configuration.path}/exec/authenticate'/>" enctype="multipart/form-data">
+   <c:if test="${app.configuration.featureSecureLoginEnabled == true}">
+    <form class="form" method="post" action="<c:out value='https://${app.configuration.realHost}/${app.configuration.path}/exec/authenticate'/>" enctype="multipart/form-data">
+   </c:if>
+   <c:if test="${app.configuration.featureSecureLoginEnabled == false}">
+     <form class="form" method="post" action="<c:out value='exec/authenticate'/>" enctype="multipart/form-data">
+   </c:if>
+   
     <table>
      <tr><td><label for="login"><fmt:message key="login.user.name"/></label></td><td><input id="login" name="login" type="text" size="20" value="<c:out value='${tmpLogin}'/>" tabindex="0"/></td></tr>
      <tr><td><label for="password"><fmt:message key="login.password"/></label></td><td><input id="password" name="password" type="password" size="20" value="" tabindex="0"/></td></tr>

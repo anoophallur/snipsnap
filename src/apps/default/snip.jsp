@@ -1,6 +1,7 @@
 <%--
   ** Snip display template.
   ** @author Matthias L. Jugel
+  ** @author Paulo Abrantes
   ** @version $Id: snip.jsp 1606 2004-05-17 10:56:18Z leo $
   --%>
 
