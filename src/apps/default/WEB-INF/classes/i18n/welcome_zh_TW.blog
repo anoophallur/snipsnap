@@ -1,0 +1,12 @@
+﻿歡迎加入 SnipSnap ！
+您現在就可以登入、發表、或者編輯您的第一篇文章。
+在上方功能表列裏有 __發表__ 的鏈結。
+您可以參考 [snipsnap-help] 中的說明以明白如何格式化一段文句。
+
+以下簡單說明：
+
+1. 用中括弧"\[\]"括起一個單字或詞，這可以建立一個頁面鏈結。
+1. 在一個詞的前、後均添加兩個底線"\_\_"可以使其成為__粗體__ 顯示，而兩條魚尾紋"\~\~" 則使它變成 ~~斜體~~。
+1. 直接使用 URL，例如 http://snipsnap.org 或這樣的格式 \{link:說明文字|網站連結\} 則可以建立一個超連結。當使用第二種格式時, 將只在頁面上顯示說明文字的內容. 比如 \{link:SnipSnap|http://snipsnap.org\} 就將在頁面上顯示 {link:SnipSnap|\http://snipsnap.org}
+1. 對 weblogs.com 的新聞通知 (weblog ping) 可能已經打開。在 {link:常見問題與解答(FAQ)|http://snipsnap.org/space/FAQ} 解釋了如何打開和關閉 weblog ping 新聞通知選項.
+
