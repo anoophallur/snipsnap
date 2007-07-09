@@ -41,6 +41,7 @@ import org.snipsnap.user.AuthenticationService;
 import org.snipsnap.user.Permissions;
 import org.snipsnap.user.Security;
 import org.snipsnap.user.User;
+import org.snipsnap.user.Permissions.PermissionType;
 
 import java.io.File;
 import java.io.IOException;
@@ -260,7 +261,7 @@ public class MetaWeblogHandler extends XmlRpcSupport implements MetaWeblogAPI {
 
         AttachmentStorage attachmentStorage = (AttachmentStorage) Components.getComponent(AttachmentStorage.class);
 
-        if (!Security.checkPermission(Permissions.ATTACH_TO_SNIP, user, snip)) {
+        if (!Security.checkPermission(PermissionType.ATTACH, user, snip)) {
             throw new XmlRpcException(0, "Do not have write access to this snip");
             //todo: on inspecting the checkPersmissions code I had the fleeting
             //impression that everyone will have permission to attach to snips. verify.

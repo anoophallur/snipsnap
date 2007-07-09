@@ -32,6 +32,7 @@ import org.snipsnap.interceptor.Invocation;
 import org.snipsnap.user.Roles;
 import org.snipsnap.user.Security;
 import org.snipsnap.user.User;
+import org.snipsnap.user.Roles.RoleType;
 
 import java.security.GeneralSecurityException;
 
@@ -42,7 +43,7 @@ public class SnipSpaceACLInterceptor extends InterceptorSupport {
     super();
     roles = new Roles();
     //roles.add("Editor");
-    roles.add("Admin");
+    roles.add(RoleType.ADMIN);
   }
 
   public Object invoke(Invocation invocation) throws Throwable {

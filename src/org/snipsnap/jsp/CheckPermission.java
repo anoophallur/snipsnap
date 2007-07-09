@@ -27,6 +27,7 @@ package org.snipsnap.jsp;
 import org.snipsnap.app.Application;
 import org.snipsnap.user.Security;
 import org.snipsnap.user.User;
+import org.snipsnap.user.Permissions.PermissionType;
 
 import javax.servlet.jsp.JspTagException;
 
@@ -43,7 +44,8 @@ public class CheckPermission extends UserAuth {
     User user = app.getUser();
     boolean isTrue = false;
     if (snip != null) {
-      isTrue = Security.checkPermission(permission, user, snip) && Security.hasRoles(user, snip, roles);
+    	  PermissionType type = (permission!=null) ? PermissionType.valueOf(permission.toUpperCase()) : null;
+      isTrue = Security.checkPermission(type, user, snip) && Security.hasRoles(user, snip, roles);
     } else {
       isTrue = Security.hasRoles(user, roles);
     }

@@ -29,6 +29,7 @@ import org.radeox.util.logging.Logger;
 import org.snipsnap.snip.Snip;
 import org.snipsnap.user.Roles;
 import org.snipsnap.user.Security;
+import org.snipsnap.user.Roles.RoleType;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -60,7 +61,7 @@ public class ObjectAuth extends ConditionalTagSupport {
     this.roles = new Roles();
     while (tok.hasMoreTokens()) {
       String token = tok.nextToken();
-      this.roles.add(token);
+      this.roles.add(RoleType.valueOf(token.toUpperCase()));
     }
   }
 

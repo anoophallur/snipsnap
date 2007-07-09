@@ -12,14 +12,34 @@
 <div class="snip-wrapper">
  <div class="snip-title"><h1 class="snip-name"><fmt:message key="login.title"/></h1></div>
  <div class="snip-content">
+ 
   <s:check roles="Authenticated" invert="true">
    <%-- display error message --%>
+  
    <c:if test="${error != null}">
-    <div class="error"><fmt:message key="login.error"/></div>
-    <div><b><fmt:message key="login.password.forgot"/> <a href="exec/forgot.jsp?login=<c:out value='${tmpLogin}'/>"><fmt:message key="login.password.reset"/></a></b></div>
+  	  <div class="error"><fmt:message key="login.error"/></div>
+    <div>
+      <b><fmt:message key="login.password.forgot"/> 
+        <a href="exec/forgot.jsp?login=<c:out value='${tmpLogin}'/>">
+         <fmt:message key="login.password.reset"/>
+        </a></b>
+     </div>
     <c:if test="${app.configuration.allowRegister}">
-      <div><b><fmt:message key="login.not.registered"/> <a href="exec/register.jsp?login=<c:out value='${tmpLogin}'/>"><fmt:message key="login.register.now"/></a></b></div>
-    </c:if>
+      <div>
+        <b><fmt:message key="login.not.registered"/> 
+        <c:if test="${app.configuration.featureSecureRegisterEnabled == true}">
+	 		<a href="<c:out value='https://${app.configuration.realHost}/${app.configuration.path}/exec/register.jsp?login=${tmpLogin}'/>">
+	  			<fmt:message key="menu.register"/>
+	 		</a>
+		</c:if>
+ 		<c:if test="${app.configuration.featureSecureRegisterEnabled == false}">
+ 			<a href="exec/register.jsp?login=<c:out value='${tmpLogin}'/>">
+ 				<fmt:message key="menu.register"/>
+ 			</a>
+		</c:if>
+       </b>
+       </div>
+   	</c:if>
     <p/>
    </c:if>
    <%-- the login form --%>

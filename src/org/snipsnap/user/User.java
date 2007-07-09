@@ -27,6 +27,7 @@ package org.snipsnap.user;
 import org.snipsnap.app.Application;
 import org.snipsnap.config.Configuration;
 import org.snipsnap.snip.SnipLink;
+import org.snipsnap.user.Roles.RoleType;
 import org.snipsnap.render.macro.list.Linkable;
 
 import java.sql.Timestamp;
@@ -190,7 +191,7 @@ public class User implements Linkable {
     Application app = Application.get();
     Configuration config = app.getConfiguration();
     return (config.getAdminLogin() != null && config.getAdminLogin().equals(login))
-      || getRoles().contains(Roles.ADMIN);
+      || getRoles().contains(RoleType.ADMIN);
   }
 
   public void setGuest(boolean guest) {

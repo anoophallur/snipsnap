@@ -1,11 +1,13 @@
 /*
- * This file is part of "SnipSnap Wiki/Weblog".
+ * This file was part of "SnipSnap Wiki/Weblog".
  *
  * Copyright (c) 2002 Stephan J. Schmidt, Matthias L. Jugel
  * All Rights Reserved.
  *
- * Please visit http://snipsnap.org/ for updates and contact.
- *
+ * And now it's also part of Snip It
+ * Copyright (c) 2007 Paulo Abrantes
+ * All rights Reserved
+ * 
  * --LICENSE NOTICE--
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +49,11 @@ public interface Blog {
 
   public List getFlatPosts();
 
-  public List getPosts(int count);
+  public List<Snip> getPosts(int count);
 
+  public List<Snip> getPosts(int begin, int end);
+  
+  public int getPostsCount();
+  
   public Snip getSnip();
 }

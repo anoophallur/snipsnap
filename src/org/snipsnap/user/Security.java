@@ -27,6 +27,8 @@ package org.snipsnap.user;
 
 import org.snipsnap.snip.Ownable;
 import org.snipsnap.snip.Snip;
+import org.snipsnap.user.Permissions.PermissionType;
+import org.snipsnap.user.Roles.RoleType;
 import org.snipsnap.container.Components;
 
 /**
@@ -48,7 +50,7 @@ public class Security {
     AuthenticationService service = (AuthenticationService) Components.getComponent(AuthenticationService.class);
 
     if (service.isAuthenticated(user)) {
-      userRoles.add(Roles.AUTHENTICATED);
+      userRoles.add(RoleType.AUTHENTICATED);
     }
     return userRoles;
   }
@@ -65,7 +67,7 @@ public class Security {
     if (object instanceof Ownable) {
       Ownable o = object;
       if (o.isOwner(user)) {
-        roles.add(Roles.OWNER);
+        roles.add(RoleType.OWNER);
       }
     }
     return roles;
@@ -81,11 +83,16 @@ public class Security {
    * @param roles Roles object containing the roles
    * @return true if the object has the permission for the roles
    */
+  @Deprecated
   public static boolean existsPermission(String permission, Snip object, Roles roles) {
-    Permissions permissions = object.getPermissions();
-    return permissions.exists(permission, roles);
+	  return existsPermission(PermissionType.valueOf(permission.toUpperCase()),object, roles);
   }
 
+  public static boolean existsPermission(PermissionType permission, Snip object, Roles roles) {
+	  Permissions permissions = object.getPermissions();
+	  return permissions.exists(permission, roles);
+  }
+  
   public static boolean hasRoles(User user, Roles roles) {
     Roles userRoles = getRoles(user);
     return userRoles.containsAny(roles);
@@ -105,7 +112,7 @@ public class Security {
    * @param object the object that should be manipulated
    * @return
    */
-  public static boolean checkPermission(String permission, User user, Snip object) {
+  public static boolean checkPermission(PermissionType permission, User user, Snip object) {
     Permissions permissions = object.getPermissions();
     if (null == permissions || permissions.empty()) {
       return true;

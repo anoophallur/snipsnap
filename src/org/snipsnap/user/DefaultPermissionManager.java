@@ -26,6 +26,7 @@ package org.snipsnap.user;
 
 import org.snipsnap.snip.Ownable;
 import org.snipsnap.snip.Snip;
+import org.snipsnap.user.Roles.RoleType;
 
 import java.util.*;
 
@@ -107,7 +108,7 @@ public class DefaultPermissionManager implements PermissionManager {
   private Roles getRoles(User user) {
     Roles userRoles = new Roles(user.getRoles());
     if (authenticationService.isAuthenticated(user)) {
-      userRoles.add(Roles.AUTHENTICATED);
+      userRoles.add(RoleType.AUTHENTICATED);
     }
     return userRoles;
   }
@@ -126,7 +127,7 @@ public class DefaultPermissionManager implements PermissionManager {
     if (object instanceof Ownable) {
       Ownable o = object;
       if (o.isOwner(user)) {
-        roles.add(Roles.OWNER);
+        roles.add(RoleType.OWNER);
       }
     }
     return roles;

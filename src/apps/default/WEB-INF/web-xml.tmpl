@@ -240,11 +240,21 @@
     <servlet-class>org.snipsnap.net.admin.ThemeImageServlet</servlet-class>
   </servlet>
 
+  <servlet>
+     <servlet-name>org.snipsnap.net.ChangeSnipPermissionsServlet</servlet-name>
+     <servlet-class>org.snipsnap.net.ChangeSnipPermissionsServlet</servlet-class>
+  </servlet>
+  
   <!-- include precompiled servlet mappings -->
   @PRECOMPILED-JSP@
 
   <!-- servlet mappings -->
 
+    <servlet-mapping>
+      <servlet-name>org.snipsnap.net.ChangeSnipPermissionsServlet</servlet-name>
+      <url-pattern>/changePermissions</url-pattern>
+    </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>jcaptcha</servlet-name>
         <url-pattern>/jcaptcha</url-pattern>

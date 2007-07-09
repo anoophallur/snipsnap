@@ -30,6 +30,8 @@ import org.snipsnap.snip.attachment.Attachments;
 import org.snipsnap.snip.label.Labels;
 import org.snipsnap.user.Permissions;
 import org.snipsnap.user.User;
+import org.snipsnap.user.Permissions.PermissionType;
+import org.snipsnap.user.Roles.RoleType;
 import org.snipsnap.render.macro.list.Linkable;
 import org.snipsnap.render.macro.list.Nameable;
 
@@ -75,8 +77,11 @@ public interface Snip extends Linkable, Ownable, Nameable, Appendable {
 
   public void setVersion(int version);
 
+  @Deprecated
   public void addPermission(String permission, String role);
 
+  public void addPermission(PermissionType type, RoleType role);
+  
   public void setPermissions(Permissions permissions);
 
   public Permissions getPermissions();

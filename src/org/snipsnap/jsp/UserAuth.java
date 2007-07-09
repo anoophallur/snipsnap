@@ -24,6 +24,12 @@
  */
 package org.snipsnap.jsp;
 
+import java.util.StringTokenizer;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
+
 import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
 import org.radeox.util.logging.Logger;
 import org.snipsnap.app.Application;
@@ -32,11 +38,7 @@ import org.snipsnap.snip.SnipSpaceFactory;
 import org.snipsnap.user.Roles;
 import org.snipsnap.user.Security;
 import org.snipsnap.user.User;
-
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.jstl.core.ConditionalTagSupport;
-import java.util.StringTokenizer;
+import org.snipsnap.user.Roles.RoleType;
 
 
 public class UserAuth extends ConditionalTagSupport {
@@ -67,7 +69,7 @@ public class UserAuth extends ConditionalTagSupport {
     this.roles = new Roles();
     while (tok.hasMoreTokens()) {
       String token = tok.nextToken();
-      this.roles.add(token);
+      this.roles.add(RoleType.valueOf(token.toUpperCase()));
     }
   }
 

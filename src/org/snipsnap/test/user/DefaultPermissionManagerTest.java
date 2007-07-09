@@ -34,6 +34,7 @@ import org.snipsnap.user.Permission;
 import org.snipsnap.user.PermissionManager;
 import org.snipsnap.user.Roles;
 import org.snipsnap.user.User;
+import org.snipsnap.user.Roles.RoleType;
 
 public class DefaultPermissionManagerTest extends TestCase {
 
@@ -74,7 +75,7 @@ public class DefaultPermissionManagerTest extends TestCase {
 
     User user = new User("test", "testpw", "testmail");
     Roles roles = new Roles();
-    roles.add("Editor");
+    roles.add(RoleType.EDITOR);
     user.setRoles(roles);
     assertTrue("Editor has REMOVE_SNIP permission", manager.check(Permission.REMOVE_SNIP, user, null));
 

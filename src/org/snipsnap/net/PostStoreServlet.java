@@ -35,6 +35,7 @@ import org.snipsnap.snip.SnipSpaceFactory;
 import org.snipsnap.user.Roles;
 import org.snipsnap.user.Security;
 import org.snipsnap.user.User;
+import org.snipsnap.user.Roles.RoleType;
 import org.snipsnap.net.filter.MultipartWrapper;
 import org.radeox.util.logging.Logger;
 
@@ -56,8 +57,8 @@ public class PostStoreServlet extends HttpServlet {
 
   static {
     REQUIRED_ROLES = new Roles();
-    REQUIRED_ROLES.add(Roles.OWNER);
-    REQUIRED_ROLES.add(Roles.EDITOR);
+    REQUIRED_ROLES.add(RoleType.OWNER);
+    REQUIRED_ROLES.add(RoleType.EDITOR);
   }
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)

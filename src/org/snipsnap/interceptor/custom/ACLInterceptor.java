@@ -32,6 +32,8 @@ import org.snipsnap.snip.Snip;
 import org.snipsnap.user.Roles;
 import org.snipsnap.user.Security;
 import org.snipsnap.user.User;
+import org.snipsnap.user.Permissions.PermissionType;
+import org.snipsnap.user.Roles.RoleType;
 
 import java.security.GeneralSecurityException;
 
@@ -47,7 +49,7 @@ public class ACLInterceptor extends InterceptorSupport {
   public ACLInterceptor() {
     super();
     roles = new Roles();
-    roles.add("Editor");
+    roles.add(RoleType.EDITOR);
   }
 
   public Object invoke(Invocation invocation) throws Throwable {
@@ -60,15 +62,16 @@ public class ACLInterceptor extends InterceptorSupport {
       //Logger.debug("ACLInterceptor: User = "+user);
       //Logger.debug("ACLInterceptor: Snip = "+snip);
       if (user != null && !user.isAdmin()) {// TODO: checking for the admin is a hack
-        if (!(Security.checkPermission("Edit", user, snip)
+        if (!(Security.checkPermission(PermissionType.EDIT, user, snip)
                 || Security.hasRoles(user, snip, roles))) {
           //Logger.debug("SECURITY EXCEPTION");
           throw new GeneralSecurityException(snip.getName() + ": " + user + " is not allowed to modify object");
         }
       }
     } else if ("getContent".equals(name) || "getXMLContent".equals(name)) {
-      String snipName = snip.getName();
-      if (user != null && ("SnipSnap/config".equals(snipName) || snipName.startsWith("SnipSnap/blacklist")) && !user.isAdmin()) {
+     // String snipName = snip.getName();
+     if(user!=null && !Security.checkPermission(PermissionType.VIEW,user,snip)) {
+      //if (user != null && ("SnipSnap/config".equals(snipName) || snipName.startsWith("SnipSnap/blacklist")) && !user.isAdmin()) {
         return "content protected";
       }
     }

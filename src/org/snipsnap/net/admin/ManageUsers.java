@@ -29,6 +29,7 @@ import org.snipsnap.config.Configuration;
 import org.snipsnap.user.UserManager;
 import org.snipsnap.user.User;
 import org.snipsnap.user.Roles;
+import org.snipsnap.user.Roles.RoleType;
 import org.snipsnap.container.Components;
 import org.snipsnap.snip.HomePage;
 import org.snipsnap.app.Application;
@@ -146,10 +147,10 @@ public class ManageUsers implements SetupHandler {
     return modified;
   }
 
-  private Set parseRoles(String roles[]) {
-    Set list = new HashSet();
+  private Set<RoleType> parseRoles(String roles[]) {
+    Set<RoleType> list = new HashSet();
     for (int i = 0; roles != null && i < roles.length; i++) {
-      list.add(roles[i]);
+      list.add(RoleType.valueOf(roles[i]));
     }
     return list;
   }

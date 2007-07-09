@@ -38,6 +38,8 @@ import org.snipsnap.user.Roles;
 import org.snipsnap.user.User;
 import org.snipsnap.user.UserManager;
 import org.snipsnap.user.UserManagerFactory;
+import org.snipsnap.user.Permissions.PermissionType;
+import org.snipsnap.user.Roles.RoleType;
 import org.snipsnap.net.admin.ThemeHelper;
 
 import java.io.*;
@@ -143,8 +145,8 @@ public class InitializeDatabase {
 
   public static Snip createConfigSnip(String name, String content, SnipSpace space) {
     Snip snip = space.create(name, content);
-    snip.getPermissions().add(Permissions.EDIT_SNIP, Roles.ADMIN);
-    snip.getPermissions().add(Permissions.ATTACH_TO_SNIP, Roles.ADMIN);
+    snip.getPermissions().add(PermissionType.EDIT, RoleType.ADMIN);
+    snip.getPermissions().add(PermissionType.ATTACH, RoleType.ADMIN);
     snip.getLabels().addLabel(new RenderEngineLabel("RenderEngine", "org.snipsnap.render.PlainTextRenderEngine"));
     space.systemStore(snip);
     return snip;
@@ -205,8 +207,9 @@ public class InitializeDatabase {
       um.remove(admin);
     }
     admin = um.create(config.getAdminLogin(), config.getAdminPassword(), config.getAdminEmail());
-    admin.getRoles().add(Roles.ADMIN);
-    admin.getRoles().add(Roles.EDITOR);
+   
+    admin.getRoles().add(RoleType.ADMIN);
+    admin.getRoles().add(RoleType.EDITOR);
     um.store(admin);
 
     // make sure the encrypted password is stored

@@ -35,6 +35,8 @@ import org.snipsnap.snip.attachment.Attachments;
 import org.snipsnap.snip.label.Labels;
 import org.snipsnap.user.Permissions;
 import org.snipsnap.user.User;
+import org.snipsnap.user.Permissions.PermissionType;
+import org.snipsnap.user.Roles.RoleType;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -178,6 +180,10 @@ public class RssSnip implements Snip {
     return;
   }
 
+  public void addPermission(PermissionType permission, RoleType role) {
+	  return;
+  }
+  
   public void setPermissions(Permissions permissions) {
     return;
   }

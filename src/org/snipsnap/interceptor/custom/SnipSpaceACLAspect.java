@@ -38,6 +38,7 @@ import org.snipsnap.snip.SnipSpace;
 import org.snipsnap.user.Roles;
 import org.snipsnap.user.Security;
 import org.snipsnap.user.User;
+import org.snipsnap.user.Roles.RoleType;
 
 import java.security.GeneralSecurityException;
 
@@ -47,7 +48,7 @@ public class SnipSpaceACLAspect implements Aspect {
 
   public SnipSpaceACLAspect() {
     roles = new Roles();
-    roles.add("Admin");
+    roles.add(RoleType.ADMIN);
   }
 
   public void introduce(AspectInstance instance) {

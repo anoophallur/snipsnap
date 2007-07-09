@@ -39,115 +39,136 @@ import java.util.List;
 
 /**
  * BlogImpl for Blog.
- *
+ * 
  * @author stephan
  * @version $Id: BlogImpl.java 1772 2004-11-01 08:17:00Z leo $
  */
 
 public class BlogImpl implements Blog {
-  private String startName;
-  private String name;
-  private Snip blog;
-  private SnipSpace space;
+	private String startName;
 
-  public BlogImpl(SnipSpace space, String blogName) {
-    this.space = space;
-    // May not be initialized, so set it to something sane
-    this.startName = Application.get().getConfiguration().getStartSnip();
-    if (blogName == null || "".equals(blogName)) {
-      blogName = startName;
-    }
-    this.name = blogName;
-    this.blog = space.load(name);
-  }
+	private String name;
 
-  public String getName() {
-    return this.name;
-  }
+	private Snip blog;
 
-  public Snip post(String content, String title) {
-    return post(BlogKit.getContent(title, content));
-  }
+	private SnipSpace space;
 
-  public Snip post(String content) {
-    Date date = new Date(new java.util.Date().getTime());
-    return post(content, date);
-  }
+	public BlogImpl(SnipSpace space, String blogName) {
+		this.space = space;
+		// May not be initialized, so set it to something sane
+		this.startName = Application.get().getConfiguration().getStartSnip();
+		if (blogName == null || "".equals(blogName)) {
+			blogName = startName;
+		}
+		this.name = blogName;
+		this.blog = space.load(name);
+	}
 
-  public Snip post(String content, Date date) {
-    String snipName = name + "/" + SnipUtil.toName(date);
-    Snip snip = null;
+	public String getName() {
+		return this.name;
+	}
 
-    // Should several posts per day be one snip or
-    // several snips?
-    int max = findMaxPost(snipName);
-    if (true) { // Application.get().getConfiguration().allow(Configuration.APP_PERM_MULTIPLEPOSTS)) {
-      // if (space.exists(snipName)) {
-      // }
-      // how many children do exist?
-      // get the highest count
-      // e.g. start/2003-05-06
-      snip = snip = space.create(snipName + "/" + (max + 1), content);
-    } else {
-      // there was a post with a least /1 then add to that post
-      if (max != 0) {
-        snipName = snipName + "/" + max;
-      }
-      if (space.exists(snipName)) {
-        snip = space.load(snipName);
-        snip.setContent(content + "\n\n" + snip.getContent());
-      } else {
-        snip = space.create(snipName, content);
-      }
-    }
+	public Snip post(String content, String title) {
+		return post(BlogKit.getContent(title, content));
+	}
 
-    //snip.setParent(weblog);
-    snip.addPermission(Permissions.EDIT_SNIP, Roles.OWNER);
-    space.systemStore(snip);
+	public Snip post(String content) {
+		Date date = new Date(new java.util.Date().getTime());
+		return post(content, date);
+	}
 
-    // Ping weblogs.com that we changed our site
-    WeblogsPing.ping(blog);
-    return snip;
-  }
+	public Snip post(String content, Date date) {
+		String snipName = name + "/" + SnipUtil.toName(date);
+		Snip snip = null;
 
-  private int findMaxPost(String snipName) {
-    Snip[] existing = space.match(snipName + "/");
-    int max = 0;
-    //System.out.println("found="+existing.length+" name="+snipName);
-    for (int i = 0; i < existing.length; i++) {
-      Snip post = existing[i];
-      String name = post.getName();
-      int index = name.lastIndexOf('/');
-      //System.out.println("name="+name);
-      if (index != -1) {
-        try {
-          //System.out.println("parsing="+name.substring(index+1));
-          max = Math.max(Integer.parseInt(name.substring(index + 1)), max);
-          //System.out.println("max="+max);
-        } catch (NumberFormatException e) {
-          //
-        }
-      }
-    }
-    return max;
-  }
+		// Should several posts per day be one snip or
+		// several snips?
+		int max = findMaxPost(snipName);
+		if (true) { // Application.get().getConfiguration().allow(Configuration.APP_PERM_MULTIPLEPOSTS))
+					// {
+			// if (space.exists(snipName)) {
+			// }
+			// how many children do exist?
+			// get the highest count
+			// e.g. start/2003-05-06
+			snip = snip = space.create(snipName + "/" + (max + 1), content);
+		} else {
+			// there was a post with a least /1 then add to that post
+			if (max != 0) {
+				snipName = snipName + "/" + max;
+			}
+			if (space.exists(snipName)) {
+				snip = space.load(snipName);
+				snip.setContent(content + "\n\n" + snip.getContent());
+			} else {
+				snip = space.create(snipName, content);
+			}
+		}
 
-  public List getFlatPosts() {
-    return Rssify.rssify(getPosts(10));
-  }
+		// snip.setParent(weblog);
+		snip.addPermission(Permissions.EDIT_SNIP, Roles.OWNER);
+		space.systemStore(snip);
 
-  public List getPosts(int count) {
-    Calendar endC = new GregorianCalendar();
-    endC.setTime(new java.util.Date());
-    endC.add(Calendar.DAY_OF_MONTH, 1);
-    Calendar startC = new GregorianCalendar();
-    startC.setTimeInMillis(blog.getCTime().getTime());
+		// Ping weblogs.com that we changed our site
+		WeblogsPing.ping(blog);
+		return snip;
+	}
 
-    List posts = space.getByDate(blog.getName(), Month.toKey(startC), Month.toKey(endC));
-    return posts.subList(0, Math.min(posts.size(), count));
-  }
+	private int findMaxPost(String snipName) {
+		Snip[] existing = space.match(snipName + "/");
+		int max = 0;
+		// System.out.println("found="+existing.length+" name="+snipName);
+		for (int i = 0; i < existing.length; i++) {
+			Snip post = existing[i];
+			String name = post.getName();
+			int index = name.lastIndexOf('/');
+			// System.out.println("name="+name);
+			if (index != -1) {
+				try {
+					// System.out.println("parsing="+name.substring(index+1));
+					max = Math.max(Integer.parseInt(name.substring(index + 1)),
+							max);
+					// System.out.println("max="+max);
+				} catch (NumberFormatException e) {
+					//
+				}
+			}
+		}
+		return max;
+	}
 
-  public Snip getSnip() {
-    return blog;
-  }
+	public List getFlatPosts() {
+		return Rssify.rssify(getPosts(10));
+	}
+
+	private List<Snip> getAllPosts() {
+		Calendar endC = new GregorianCalendar();
+		endC.setTime(new java.util.Date());
+		endC.add(Calendar.DAY_OF_MONTH, 1);
+		Calendar startC = new GregorianCalendar();
+		startC.setTimeInMillis(blog.getCTime().getTime());
+
+		List<Snip> posts = space.getByDate(blog.getName(), Month.toKey(startC),
+				Month.toKey(endC));
+		return posts;
+
+	}
+
+	public int getPostsCount() {
+		return getAllPosts().size();
+	}
+	
+	public List<Snip> getPosts(int count) {
+		List<Snip> posts = getAllPosts();
+		return posts.subList(0, Math.min(posts.size(), count));
+	}
+
+	public List<Snip> getPosts(int begin, int end) {
+		List<Snip> posts = getAllPosts();
+		return posts.subList(Math.min(posts.size(),begin),Math.min(posts.size(),end));
+	}
+	
+	public Snip getSnip() {
+		return blog;
+	}
 }

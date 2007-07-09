@@ -1,11 +1,11 @@
 /*
- * This file is part of "SnipSnap Wiki/Weblog".
+ * This file was part of "SnipSnap Wiki/Weblog".
+ * That code is Copyright (c) 2002 Stephan J. Schmidt, Matthias L. Jugel
+ * All Rights Reserved. (visit http://snipsnap.org)
  *
- * Copyright (c) 2002 Stephan J. Schmidt, Matthias L. Jugel
- * All Rights Reserved.
- *
- * Please visit http://snipsnap.org/ for updates and contact.
- *
+ * Now this file is part of Snip It, a SnipSnap fork  
+ * The new code is Copyright (c) 2006-2007 Paulo Abrantes
+ * 
  * --LICENSE NOTICE--
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,129 +29,180 @@ import java.util.*;
 
 /**
  * User roleSet
- *
+ * 
+ * @author Paulo Abrantes (pabrantes@pabrantes.net)
  * @author stephan
  * @version $Id: Roles.java 864 2003-05-23 10:47:26Z stephan $
  */
 
 public class Roles {
-  private Set roleSet;
 
-  public final static String AUTHENTICATED = "Authenticated";
-  public final static String OWNER = "Owner";
-  public final static String ADMIN = "Admin";
-  public final static String EDITOR = "Editor";
-  public final static String NOCOMMENT = "NoComment";
+	public enum RoleType {
+		AUTHENTICATED("Authenticated"), OWNER("Owner"), ADMIN("Admin"), EDITOR(
+				"Editor"), NOCOMMENT("NoComment"); 
+		/*
+		 * I really don't agree with having no comment as a role
+		 * but I'm interested in preserving backward compatibility
+		 * with snipsnap.
+		 * 
+		 * Paulo Abrantes 18-04-2007
+		 */
 
-  private static Set ROLES = null;
+		private String role;
 
-  public static Set allRoles() {
-    if (ROLES == null) {
-      ROLES = new TreeSet();
-      ROLES.add(EDITOR);
-      ROLES.add(ADMIN);
-      ROLES.add(NOCOMMENT);
-      ROLES = Collections.unmodifiableSet(ROLES);
-    }
-    return ROLES;
-  }
+		private RoleType(String role) {
+			this.role = role;
+		}
 
-  public Set getAllRoles() {
-    return Roles.allRoles();
-  }
+		public String getRoleName() {
+			return role;
+		}
+		
+	}
 
-  public Roles(Roles roles) {
-    roleSet = new HashSet(roles.roleSet);
-  }
+	public final static String AUTHENTICATED = RoleType.AUTHENTICATED
+			.getRoleName();
 
-  public Roles(String roleString) {
-    this.roleSet = deserialize(roleString);
-  }
+	public final static String OWNER = RoleType.OWNER.getRoleName();
 
-  public Roles() {
-    roleSet = new HashSet();
-  }
+	public final static String ADMIN = RoleType.ADMIN.getRoleName();
 
-  public Roles(Set roleSet) {
-    this.roleSet = new HashSet(roleSet);
-  }
+	public final static String EDITOR = RoleType.EDITOR.getRoleName();
 
-  public boolean isEmpty() {
-    return roleSet.isEmpty();
-  }
+	public final static String NOCOMMENT = RoleType.NOCOMMENT.getRoleName();
 
-  public void remove(String role) {
-    if (roleSet.contains(role)) {
-      roleSet.remove(role);
-    }
-  }
+	private static Set<RoleType> ROLES = null;
 
-  public void add(String role) {
-    roleSet.add(role);
-  }
+	private Set<RoleType> roleSet;
 
-  public void addAll(Roles roles) {
-    this.roleSet.addAll(roles.getRoleSet());
-  }
+	public static Set<RoleType> allRoles() {
+		if (ROLES == null) {
+			ROLES = new TreeSet<RoleType>();
+			ROLES.add(RoleType.EDITOR);
+			ROLES.add(RoleType.ADMIN);
+			ROLES.add(RoleType.NOCOMMENT);
+			ROLES = Collections.unmodifiableSet(ROLES);
+		}
+		return ROLES;
+	}
 
-  public Iterator iterator() {
-    return roleSet.iterator();
-  }
+	public Set getAllRoles() {
+		return Roles.allRoles();
+	}
 
-  public boolean contains(String role) {
-    return roleSet.contains(role);
-  }
+	public Roles(Roles roles) {
+		roleSet = new HashSet<RoleType>(roles.roleSet);
+	}
 
-  public boolean containsAny(Roles r1) {
-    // Optimize to use the smaller set
-    Roles r2 = this;
-    Iterator iterator = r1.iterator();
-    while (iterator.hasNext()) {
-      String s = (String) iterator.next();
-      if (r2.contains(s)) { return true; }
-    }
-    return false;
-  }
+	public Roles(String roleString) {
+		this.roleSet = deserialize(roleString);
+	}
 
-  public Set getRoleSet() {
-    return Collections.unmodifiableSet(roleSet);
-  }
+	public Roles() {
+		roleSet = new HashSet<RoleType>();
+	}
 
-  public String toString() {
-    return serialize(roleSet);
-  }
+	public Roles(Set<RoleType> roleSet) {
+		this.roleSet = new HashSet<RoleType>(roleSet);
+	}
 
-  private String serialize(Set roles) {
-    if (null == roles || roles.isEmpty()) { return ""; }
+	public boolean isEmpty() {
+		return roleSet.isEmpty();
+	}
 
-    StringBuffer buffer = new StringBuffer();
-    Iterator iterator = roles.iterator();
-    while (iterator.hasNext()) {
-      String role = (String) iterator.next();
-      buffer.append(role);
-      if (iterator.hasNext()) { buffer.append(":"); }
-    }
-    return buffer.toString();
-  }
+	@Deprecated
+	public void remove(String role) {
+		remove(RoleType.valueOf(role.toUpperCase()));
+	}
 
-  private Set deserialize(String roleString) {
-    if (null == roleString || "".equals(roleString)) { return new HashSet(); }
+	public void remove(RoleType role) {
+		roleSet.remove(role);
+	}
 
-    StringTokenizer st = new StringTokenizer(roleString, ":");
-    Set roles = new HashSet();
+	@Deprecated
+	public void add(String role) {
+		this.add(RoleType.valueOf(role.toUpperCase()));
+	}
 
-    while (st.hasMoreTokens()) {
-      roles.add(st.nextToken());
-    }
+	public void add(RoleType role) {
+		roleSet.add(role);
+	}
 
-    return roles;
-  }
+	public void addAll(Roles roles) {
+		this.roleSet.addAll(roles.getRoleSet());
+	}
 
-  public int hashCode() {
-    return getRoleSet().hashCode();
-  }
+	public Iterator<RoleType> iterator() {
+		return roleSet.iterator();
+	}
 
-  public boolean equals(Roles obj) {
-    return getRoleSet().equals(obj.getRoleSet());
-  }
+	@Deprecated
+	public boolean contains(String role) {
+		return contains(RoleType.valueOf(role.toUpperCase()));
+	}
+
+	public boolean contains(RoleType role) {
+		return roleSet.contains(role);
+	}
+
+	public boolean containsAny(Roles roles) {
+
+		Roles myRoles = this;
+		Iterator<RoleType> iterator = roles.iterator();
+		while (iterator.hasNext()) {
+			RoleType role = iterator.next();
+			if (myRoles.contains(role)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Set<RoleType> getRoleSet() {
+		return Collections.unmodifiableSet(roleSet);
+	}
+
+	public String toString() {
+		return serialize(roleSet);
+	}
+
+	private String serialize(Set<RoleType> roles) {
+		if (null == roles || roles.isEmpty()) {
+			return "";
+		}
+
+		StringBuffer buffer = new StringBuffer();
+		Iterator<RoleType> iterator = roles.iterator();
+		while (iterator.hasNext()) {
+			RoleType role = iterator.next();
+			buffer.append(role.getRoleName());
+			if (iterator.hasNext()) {
+				buffer.append(":");
+			}
+		}
+		return buffer.toString();
+	}
+
+	private Set<RoleType> deserialize(String roleString) {
+		Set<RoleType> roles = new HashSet<RoleType>();
+
+		if (roleString != null && roleString.length() > 0) {
+
+			StringTokenizer st = new StringTokenizer(roleString, ":");
+
+			while (st.hasMoreTokens()) {
+				roles.add(RoleType.valueOf(st.nextToken().toUpperCase()));
+			}
+		}
+
+		return roles;
+	}
+
+	public int hashCode() {
+		return getRoleSet().hashCode();
+	}
+
+	public boolean equals(Roles obj) {
+		return getRoleSet().equals(obj.getRoleSet());
+	}
 }

@@ -33,8 +33,6 @@
   </s:check>
   <s:check roles="Owner:Editor" invert="true">
    <fmt:message key="login.please">
-     <fmt:param><c:out value="${app.configuration.realHost}"/></fmt:param>
-     <fmt:param><c:out value="${app.configuration.path}"/></fmt:param>
      <fmt:param><fmt:message key="weblog.post.as.editor"/></fmt:param>
    </fmt:message>
   </s:check>

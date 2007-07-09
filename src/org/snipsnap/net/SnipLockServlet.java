@@ -24,21 +24,25 @@
  */
 package org.snipsnap.net;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.snipsnap.app.Application;
 import org.snipsnap.config.Configuration;
 import org.snipsnap.snip.Snip;
 import org.snipsnap.snip.SnipLink;
 import org.snipsnap.snip.SnipSpace;
 import org.snipsnap.snip.SnipSpaceFactory;
-import org.snipsnap.user.Permissions;
 import org.snipsnap.user.Roles;
 import org.snipsnap.user.User;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.snipsnap.user.Permissions.PermissionType;
+import org.snipsnap.user.Roles.RoleType;
 
 /**
  * Servlet to lock and unlock snips
@@ -46,8 +50,15 @@ import java.io.IOException;
  * @version $Id: SnipLockServlet.java 1606 2004-05-17 10:56:18Z leo $
  */
 public class SnipLockServlet extends HttpServlet {
-  private final static Roles ALLOWED_ROLES = new Roles("Admin:Editor");
+  private final static Roles ALLOWED_ROLES;
 
+  static {
+	  Set<RoleType> types = new HashSet<RoleType>();
+	  types.add(RoleType.ADMIN);
+	  types.add(RoleType.EDITOR);
+	  ALLOWED_ROLES = new Roles(types);
+  }
+  
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String name = request.getParameter("name");
@@ -56,15 +67,15 @@ public class SnipLockServlet extends HttpServlet {
 
     User user = Application.get().getUser();
     if (user != null && user.getRoles().containsAny(ALLOWED_ROLES)) {
-      String role = Roles.EDITOR;
-      if(user.getRoles().contains(Roles.ADMIN)) {
-        role = Roles.ADMIN;
+      RoleType role = RoleType.EDITOR;
+      if(user.getRoles().contains(RoleType.ADMIN)) {
+        role = RoleType.ADMIN;
       }
 
       if (request.getParameter("unlock") != null) {
-        snip.getPermissions().remove(Permissions.EDIT_SNIP, role);
+        snip.getPermissions().remove(PermissionType.EDIT, role);
       } else {
-        snip.getPermissions().add(Permissions.EDIT_SNIP, role);
+        snip.getPermissions().add(PermissionType.EDIT, role);
       }
       space.store(snip);
     }

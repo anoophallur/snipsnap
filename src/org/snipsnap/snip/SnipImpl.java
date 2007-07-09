@@ -5,6 +5,7 @@
  * All Rights Reserved.
  * Please visit http://snipsnap.org/ for updates and contact.
  *
+ * And now is also part of Snip it
  * Copyright (c) 2006-2007 Paulo Abrantes 
  * All Rights Reserved.   
  *
@@ -43,6 +44,8 @@ import org.snipsnap.snip.name.PathRemoveFormatter;
 import org.snipsnap.snip.name.WeblogNameFormatter;
 import org.snipsnap.user.Permissions;
 import org.snipsnap.user.User;
+import org.snipsnap.user.Permissions.PermissionType;
+import org.snipsnap.user.Roles.RoleType;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedInputStream;
@@ -169,10 +172,15 @@ public class SnipImpl implements Snip {
 		return user.getLogin().equals(getOwner());
 	}
 
+	@Deprecated
 	public void addPermission(String permission, String role) {
-		permissions.add(permission, role);
+		this.addPermission(PermissionType.valueOf(permission.toUpperCase()),RoleType.valueOf(role.toUpperCase()));
 	}
 
+	public void addPermission(PermissionType permission, RoleType role) {
+		permissions.add(permission,role);
+	}
+	
 	public void setPermissions(Permissions permissions) {
 		this.permissions = permissions;
 	}
@@ -548,8 +556,9 @@ public class SnipImpl implements Snip {
 		Snip parent = getParent();
 		if (parent != null && parent.isWeblog()) {
 			String postTitle = getContent();
-			return postTitle.substring(postTitle.indexOf("1") + 2, postTitle
-					.indexOf("{"));
+			
+			return postTitle.contains("1") && postTitle.contains("{") ? postTitle.substring(postTitle.indexOf("1") + 2, postTitle
+					.indexOf("{")) : "No title";
 		} else {
 			if (null == nameFormatter) {
 				nameFormatter = new PathRemoveFormatter();

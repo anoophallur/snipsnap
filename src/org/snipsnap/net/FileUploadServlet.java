@@ -39,6 +39,8 @@ import org.snipsnap.user.Permissions;
 import org.snipsnap.user.Roles;
 import org.snipsnap.user.Security;
 import org.snipsnap.user.User;
+import org.snipsnap.user.Permissions.PermissionType;
+import org.snipsnap.user.Roles.RoleType;
 import org.snipsnap.container.Components;
 
 import javax.servlet.RequestDispatcher;
@@ -61,8 +63,8 @@ public class FileUploadServlet extends HttpServlet {
 
   public void init(ServletConfig servletConfig) throws ServletException {
     super.init(servletConfig);
-    roles.add("Editor");
-    roles.add("Admin");
+    roles.add(RoleType.EDITOR);
+    roles.add(RoleType.ADMIN);
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -102,7 +104,7 @@ public class FileUploadServlet extends HttpServlet {
     AttachmentStorage attachmentStorage = (AttachmentStorage) Components.getComponent(AttachmentStorage.class);
 
     User user = Application.get().getUser();
-    if (Security.checkPermission(Permissions.ATTACH_TO_SNIP, user, snip)) {
+    if (Security.checkPermission(PermissionType.ATTACH, user, snip)) {
       if (request.getParameter("upload") != null) {
         try {
           uploadFile(request, snip);
