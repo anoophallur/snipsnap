@@ -74,4 +74,13 @@ public class LazyDataSource implements DataSource {
     return getDataSource().getLoginTimeout();
   }
 
+  public boolean isWrapperFor(Class iface) throws SQLException {
+    return false;
+  }
+
+  public Object unwrap(Class iface) throws SQLException {
+    throw new SQLException("New in 1.6 - no wrapper. Should never be called");
+  }
+
+
 }
